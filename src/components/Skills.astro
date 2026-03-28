@@ -1,0 +1,42 @@
+---
+import skillsData from '../data/skills.json';
+
+const { categories } = skillsData;
+---
+
+<section id="skills" class="bg-surface py-24 sm:py-32">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6">
+    <h2
+      class="animate-on-scroll mb-16 text-center text-3xl font-bold tracking-tight sm:text-4xl"
+    >
+      Skills
+    </h2>
+
+    <div class="space-y-12">
+      {
+        categories.map((category, catIndex) => (
+          <div class={`animate-on-scroll delay-${(catIndex % 3) * 100 + 100}`}>
+            <h3 class="mb-6 text-xl font-semibold text-on-surface">{category.name}</h3>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {category.skills.map((skill, skillIndex) => (
+                <div class="group rounded-xl border border-surface-tertiary bg-surface-secondary p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary-500/10">
+                  <div class="mb-3 flex items-center justify-between">
+                    <span class="font-medium text-on-surface">{skill.name}</span>
+                    <span class="text-sm text-on-surface-tertiary">{skill.level}%</span>
+                  </div>
+                  <div class="h-2 overflow-hidden rounded-full bg-surface-tertiary">
+                    <div
+                      class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400"
+                      data-level={skill.level}
+                      style={`transition-delay: ${skillIndex * 0.1}s;`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
