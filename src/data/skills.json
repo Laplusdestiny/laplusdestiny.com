@@ -1,0 +1,134 @@
+{
+  "categories": [
+    {
+      "name": "プログラミング言語",
+      "skills": [
+        {
+          "name": "Python",
+          "level": 90,
+          "icon": "python"
+        },
+        {
+          "name": "SQL",
+          "level": 85,
+          "icon": "database"
+        },
+        {
+          "name": "JavaScript",
+          "level": 50,
+          "icon": "javascript"
+        },
+        {
+          "name": "TypeScript",
+          "level": 50,
+          "icon": "typescript"
+        },
+        {
+          "name": "R",
+          "level": 50,
+          "icon": "r"
+        }
+      ]
+    },
+    {
+      "name": "フレームワーク・ライブラリ",
+      "skills": [
+        {
+          "name": "TensorFlow",
+          "level": 75,
+          "icon": "tensorflow"
+        },
+        {
+          "name": "PyTorch",
+          "level": 70,
+          "icon": "pytorch"
+        },
+        {
+          "name": "scikit-learn",
+          "level": 85,
+          "icon": "scikitlearn"
+        },
+        {
+          "name": "React",
+          "level": 40,
+          "icon": "react"
+        }
+      ]
+    },
+    {
+      "name": "データ分析・ML関連",
+      "skills": [
+        {
+          "name": "Pandas",
+          "level": 90,
+          "icon": "pandas"
+        },
+        {
+          "name": "NumPy",
+          "level": 85,
+          "icon": "numpy"
+        },
+        {
+          "name": "Polars",
+          "level": 80,
+          "icon": "polars"
+        },
+        {
+          "name": "Plotly",
+          "level": 90,
+          "icon": "plotly"
+        },
+        {
+          "name": "Matplotlib",
+          "level": 80,
+          "icon": "chart"
+        },
+        {
+          "name": "Jupyter",
+          "level": 85,
+          "icon": "jupyter"
+        }
+      ]
+    },
+    {
+      "name": "クラウド・インフラ",
+      "skills": [
+        {
+          "name": "AWS",
+          "level": 50,
+          "icon": "aws"
+        },
+        {
+          "name": "Docker",
+          "level": 40,
+          "icon": "docker"
+        }
+      ]
+    },
+    {
+      "name": "その他ツール",
+      "skills": [
+        {
+          "name": "Git",
+          "level": 90,
+          "icon": "git"
+        },
+        {
+          "name": "GitHub",
+          "level": 85,
+          "icon": "github"
+        },
+        {
+          "name": "VS Code",
+          "level": 90,
+          "icon": "vscode"
+        },
+        {
+          "name": "Linux",
+          "level": 80,
+          "icon": "linux"
+        }
+      ]
+    }
+  ]
+}
