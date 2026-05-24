@@ -29,6 +29,12 @@
       "url": "https://kaggle.com/laplusdestiny",
       "description": "データサイエンスコンペティション",
       "icon": "kaggle"
+    },
+    {
+      "name": "Bluesky",
+      "url": "https://bsky.app/profile/laplusdestiny.com",
+      "description": "Blueskyもやっています",
+      "icon": "bluesky"
     }
   ]
 }
