@@ -1,0 +1,26 @@
+# ブログの新着記事や GitHub の更新をサイトに反映するため、毎日 1 回 Cloudflare で再ビルドする。
+# 事前に Cloudflare で Deploy Hook を作り、その URL をリポジトリの Secret
+# CLOUDFLARE_DEPLOY_HOOK_URL に登録しておく（手順は README を参照）。
+name: Scheduled rebuild
+
+on:
+  schedule:
+    - cron: "23 21 * * *" # 毎日 06:23 (JST)
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Cloudflare deploy hook
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "::warning::Secret CLOUDFLARE_DEPLOY_HOOK_URL が未設定のため、再ビルドをスキップしました"
+            exit 0
+          fi
+          curl --fail --silent --show-error --retry 3 -X POST "$DEPLOY_HOOK_URL" > /dev/null
+          echo "再ビルドを依頼しました"
