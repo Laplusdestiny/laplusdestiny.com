@@ -1,0 +1,116 @@
+---
+import type { QuarterCount } from '../lib/blog';
+import { niceTicks } from '../lib/format';
+
+interface Props {
+  quarters: QuarterCount[];
+}
+
+const { quarters } = Astro.props;
+const max = Math.max(...quarters.map((q) => q.count));
+const ticks = niceTicks(max);
+const top = ticks[ticks.length - 1];
+const pct = (value: number) => `${((value / top) * 100).toFixed(2)}%`;
+const name = (q: QuarterCount) => `${q.year}年 第${q.quarter}四半期`;
+
+// 数値ラベルは全部には付けない。いちばん多い期と、いまの期だけ
+const lastIndex = quarters.length - 1;
+const maxIndex = quarters.findLastIndex((q) => q.count === max);
+const labeled = new Set([maxIndex, lastIndex]);
+const first = quarters[0];
+const last = quarters[lastIndex];
+---
+
+<figure class="relative" data-chart>
+  <figcaption>
+    <span class="block text-sm font-semibold">四半期ごとの投稿数</span>
+    <span class="mt-1 block font-mono text-xs text-ink-3">
+      {first.year} Q{first.quarter} – {last.year} Q{last.quarter}
+    </span>
+  </figcaption>
+
+  <div class="mt-5 grid grid-cols-[1.25rem_1fr] gap-x-2">
+    <div class="relative h-40" aria-hidden="true">
+      {
+        ticks.map((tick) => (
+          <span
+            class="absolute right-0 translate-y-1/2 font-mono text-[11px] leading-none tabular-nums text-ink-3"
+            style={`bottom: ${pct(tick)}`}
+          >
+            {tick}
+          </span>
+        ))
+      }
+    </div>
+
+    <div class="relative h-40">
+      {ticks.map((tick) => <div class="absolute inset-x-0 border-t border-line" style={`bottom: ${pct(tick)}`} aria-hidden="true" />)}
+      <ol class="absolute inset-0 flex items-end gap-0.5">
+        {
+          quarters.map((q, i) => (
+            <li
+              class="relative flex h-full flex-1 cursor-default items-end justify-center rounded-t hover:bg-line/40"
+              tabindex="0"
+              aria-label={`${name(q)}: ${q.count}本`}
+              data-tip-value={`${q.count} 本`}
+              data-tip-label={name(q)}
+            >
+              <span data-tip-anchor class="block w-full max-w-6 rounded-t-[4px] bg-accent" style={`height: ${pct(q.count)}`} />
+              {labeled.has(i) && q.count > 0 && (
+                <span
+                  class="absolute left-1/2 -translate-x-1/2 pb-1 font-mono text-[11px] leading-none tabular-nums text-ink-2"
+                  style={`bottom: ${pct(q.count)}`}
+                  aria-hidden="true"
+                >
+                  {q.count}
+                </span>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div></div>
+    <ol class="mt-2 flex gap-0.5 font-mono text-[10px] leading-tight text-ink-3" aria-hidden="true">
+      {
+        quarters.map((q, i) => (
+          <li class="flex-1 text-center">
+            <span class="block">Q{q.quarter}</span>
+            <span class="block h-3">{(q.quarter === 1 || i === 0) && `'${String(q.year).slice(2)}`}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <details class="mt-4 text-xs">
+    <summary class="cursor-pointer text-ink-3 hover:text-ink">表で見る</summary>
+    <table class="mt-2 w-full max-w-xs font-mono tabular-nums">
+      <thead>
+        <tr class="border-b border-line text-left text-ink-3">
+          <th class="py-1 font-normal">期間</th>
+          <th class="py-1 text-right font-normal">投稿数</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          quarters.map((q) => (
+            <tr class="border-b border-line/60">
+              <td class="py-1">
+                {q.year} Q{q.quarter}
+              </td>
+              <td class="py-1 text-right">{q.count}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </details>
+
+  <div class="chart-tip" aria-hidden="true" hidden></div>
+</figure>
+
+<script>
+  import '../scripts/chart-tooltip';
+</script>

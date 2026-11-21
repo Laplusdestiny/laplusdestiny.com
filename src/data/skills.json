@@ -1,32 +1,41 @@
 {
+  "tiers": [
+    {
+      "id": "main",
+      "label": "主に使う"
+    },
+    {
+      "id": "work",
+      "label": "使える"
+    },
+    {
+      "id": "tried",
+      "label": "触ったことがある"
+    }
+  ],
   "categories": [
     {
       "name": "プログラミング言語",
       "skills": [
         {
           "name": "Python",
-          "level": 90,
-          "icon": "python"
+          "tier": "main"
         },
         {
           "name": "SQL",
-          "level": 85,
-          "icon": "database"
+          "tier": "main"
         },
         {
           "name": "JavaScript",
-          "level": 50,
-          "icon": "javascript"
+          "tier": "tried"
         },
         {
           "name": "TypeScript",
-          "level": 50,
-          "icon": "typescript"
+          "tier": "tried"
         },
         {
           "name": "R",
-          "level": 50,
-          "icon": "r"
+          "tier": "tried"
         }
       ]
     },
@@ -35,23 +44,19 @@
       "skills": [
         {
           "name": "TensorFlow",
-          "level": 75,
-          "icon": "tensorflow"
+          "tier": "work"
         },
         {
           "name": "PyTorch",
-          "level": 70,
-          "icon": "pytorch"
+          "tier": "work"
         },
         {
           "name": "scikit-learn",
-          "level": 85,
-          "icon": "scikitlearn"
+          "tier": "main"
         },
         {
           "name": "React",
-          "level": 40,
-          "icon": "react"
+          "tier": "tried"
         }
       ]
     },
@@ -60,33 +65,27 @@
       "skills": [
         {
           "name": "Pandas",
-          "level": 90,
-          "icon": "pandas"
+          "tier": "main"
         },
         {
           "name": "NumPy",
-          "level": 85,
-          "icon": "numpy"
+          "tier": "main"
         },
         {
           "name": "Polars",
-          "level": 80,
-          "icon": "polars"
+          "tier": "work"
         },
         {
           "name": "Plotly",
-          "level": 90,
-          "icon": "plotly"
+          "tier": "main"
         },
         {
           "name": "Matplotlib",
-          "level": 80,
-          "icon": "chart"
+          "tier": "work"
         },
         {
           "name": "Jupyter",
-          "level": 85,
-          "icon": "jupyter"
+          "tier": "main"
         }
       ]
     },
@@ -95,13 +94,11 @@
       "skills": [
         {
           "name": "AWS",
-          "level": 50,
-          "icon": "aws"
+          "tier": "tried"
         },
         {
           "name": "Docker",
-          "level": 40,
-          "icon": "docker"
+          "tier": "tried"
         }
       ]
     },
@@ -110,23 +107,19 @@
       "skills": [
         {
           "name": "Git",
-          "level": 90,
-          "icon": "git"
+          "tier": "main"
         },
         {
           "name": "GitHub",
-          "level": 85,
-          "icon": "github"
+          "tier": "main"
         },
         {
           "name": "VS Code",
-          "level": 90,
-          "icon": "vscode"
+          "tier": "main"
         },
         {
           "name": "Linux",
-          "level": 80,
-          "icon": "linux"
+          "tier": "work"
         }
       ]
     }
