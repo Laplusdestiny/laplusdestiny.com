@@ -1,0 +1,7 @@
+onlyBuiltDependencies:
+  - esbuild
+
+# 推移的依存の脆弱性対策（npm audit / pnpm audit で検出されたもの）
+overrides:
+  esbuild: ^0.28.2
+  source-map-js: ^1.2.2
