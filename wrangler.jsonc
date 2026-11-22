@@ -1,0 +1,8 @@
+{
+  "name": "laplusdestiny-portfolio",
+  "type": "javascript",
+  "compatibility_date": "2026-05-24",
+  "assets": {
+    "directory": "./dist"
+  }
+}

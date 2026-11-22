@@ -25,6 +25,12 @@
       "icon": "twitter"
     },
     {
+      "name": "Bluesky",
+      "url": "https://bsky.app/profile/laplusdestiny.com",
+      "description": "Blueskyもやっています",
+      "icon": "bluesky"
+    },
+    {
       "name": "Kaggle",
       "url": "https://kaggle.com/laplusdestiny",
       "description": "データサイエンスコンペティション",
