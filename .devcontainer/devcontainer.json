@@ -1,0 +1,44 @@
+{
+  "name": "laplusdestiny.com (Astro)",
+  // Astro 6 requires Node >= 22.12. Match the local Node 24 environment.
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Keep node_modules in a named volume so host and container binaries
+  // (esbuild, sharp) never mix, and to avoid slow bind-mount I/O on Docker Desktop.
+  "mounts": [
+    "source=${localWorkspaceFolderBasename}-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+  ],
+
+  "remoteUser": "node",
+  "containerEnv": {
+    "ASTRO_TELEMETRY_DISABLED": "1"
+  },
+
+  // Volumes are created root-owned, so hand node_modules to the node user,
+  // then install the same pnpm major version used locally and install deps.
+  "postCreateCommand": "sudo chown node:node node_modules && npm install -g pnpm@12.21.0 && pnpm install --frozen-lockfile",
+
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": {
+      "label": "Astro dev server",
+      "onAutoForward": "openBrowser"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "bradlc.vscode-tailwindcss"
+      ]
+    },
+    "codespaces": {
+      "openFiles": ["README.md"]
+    }
+  }
+}
