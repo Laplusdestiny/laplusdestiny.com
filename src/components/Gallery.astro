@@ -1,110 +1,87 @@
 ---
+import CloseIcon from '~icons/lucide/x';
+import SectionHeading from './SectionHeading.astro';
 import galleryData from '../data/gallery.json';
+import { mapSequential, optimizeRemoteImage } from '../lib/image';
 
-const { photos } = galleryData;
+const photos = (
+  await mapSequential(galleryData.photos, async (photo, index) => {
+    // 一覧用の小さい画像と、拡大表示用の画像をビルド時に作る（元の写真より大きくはしない）
+    const thumb = await optimizeRemoteImage(photo.url, { widths: [400, 800] });
+    const full = await optimizeRemoteImage(photo.url, {});
+    return thumb && full ? { ...photo, number: index + 1, thumb, full } : undefined;
+  })
+).filter((photo) => photo !== undefined);
 ---
 
-<section id="gallery" class="bg-surface-secondary py-24 sm:py-32">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6">
-    <h2
-      class="animate-on-scroll mb-16 text-center text-3xl font-bold tracking-tight sm:text-4xl"
-    >
-      Gallery
-    </h2>
+{
+  photos.length > 0 && (
+    <section id="photos" aria-labelledby="photos-title" class="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
+      <SectionHeading id="photos-title" label="Photos" meta={`${photos.length} shots`} title="撮ったもの" />
 
-    <!-- Photo Grid -->
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {
-        photos.map((photo, index) => (
-          <div
-            class={`animate-on-scroll delay-${(index % 5) * 100 + 100} group relative cursor-pointer overflow-hidden rounded-xl`}
-            data-lightbox-src={photo.url}
-            data-lightbox-alt={photo.alt}
-          >
-            <div class="aspect-square">
-              <img
-                src={photo.thumbnail}
-                alt={photo.alt}
-                class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                loading="lazy"
-              />
-            </div>
-            <!-- Hover overlay -->
-            <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <div class="p-4">
-                <p class="text-sm font-medium text-white">{photo.alt}</p>
-              </div>
-            </div>
-            <!-- Zoom icon -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-              <div class="rounded-full bg-white/20 p-3 backdrop-blur-sm">
-                <svg
-                  class="h-6 w-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  </div>
+      <ul class="grid gap-x-5 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+        {photos.map((photo) => (
+          <li>
+            <figure>
+              <button
+                type="button"
+                class="group block w-full overflow-hidden rounded border border-line bg-card"
+                data-photo-src={photo.full.src}
+                data-photo-alt={photo.alt}
+                aria-label={`「${photo.alt}」を拡大表示`}
+              >
+                <img
+                  src={photo.thumb.src}
+                  srcset={photo.thumb.srcset}
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) 50vw, 100vw"
+                  width={photo.thumb.width}
+                  height={photo.thumb.height}
+                  alt={photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-[4/3] w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.03]"
+                />
+              </button>
+              <figcaption class="mt-2 font-mono text-xs text-ink-3">
+                fig.{photo.number} — {photo.alt}
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox-overlay" role="dialog" aria-modal="true" aria-label="画像拡大表示">
-    <button
-      id="lightbox-close"
-      class="absolute top-4 right-4 z-10 rounded-full bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-      aria-label="閉じる"
-    >
-      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-    <img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain" />
-  </div>
-</section>
+      <dialog id="lightbox" class="lightbox m-auto max-h-none max-w-none bg-transparent p-0 text-white" aria-label="写真の拡大表示">
+        <form method="dialog" class="fixed top-4 right-4">
+          <button class="rounded-full bg-white/10 p-2 hover:bg-white/20" aria-label="閉じる">
+            <CloseIcon class="h-6 w-6" aria-hidden="true" />
+          </button>
+        </form>
+        <figure class="flex flex-col items-center gap-3">
+          <img id="lightbox-image" src="" alt="" class="max-h-[85vh] max-w-[92vw] rounded object-contain" />
+          <figcaption id="lightbox-caption" class="font-mono text-xs text-white/80" />
+        </figure>
+      </dialog>
+    </section>
+  )
+}
 
 <script>
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-  const lightboxClose = document.getElementById('lightbox-close');
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const image = document.getElementById('lightbox-image') as HTMLImageElement | null;
+  const caption = document.getElementById('lightbox-caption');
 
-  // Open lightbox
-  document.querySelectorAll('[data-lightbox-src]').forEach((el) => {
-    el.addEventListener('click', () => {
-      const src = (el as HTMLElement).dataset.lightboxSrc || '';
-      const alt = (el as HTMLElement).dataset.lightboxAlt || '';
-      if (lightboxImg) {
-        lightboxImg.src = src;
-        lightboxImg.alt = alt;
-      }
-      lightbox?.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+  document.querySelectorAll<HTMLButtonElement>('[data-photo-src]').forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!dialog || !image) return;
+      image.src = button.dataset.photoSrc ?? '';
+      image.alt = button.dataset.photoAlt ?? '';
+      if (caption) caption.textContent = button.dataset.photoAlt ?? '';
+      dialog.showModal();
     });
   });
 
-  // Close lightbox
-  function closeLightbox() {
-    lightbox?.classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
-
-  lightboxClose?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
+  // 写真の外側（背景）をクリックしたら閉じる
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
   });
 </script>

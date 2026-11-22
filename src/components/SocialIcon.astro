@@ -1,0 +1,28 @@
+---
+import BlogIcon from '~icons/lucide/book-open';
+import GitHubIcon from '~icons/fa7-brands/github';
+import XIcon from '~icons/fa7-brands/x-twitter';
+import BlueskyIcon from '~icons/fa7-brands/bluesky';
+import KaggleIcon from '~icons/fa7-brands/kaggle';
+import MisskeyIcon from '~icons/simple-icons/misskey';
+import LinkIcon from '~icons/lucide/link';
+
+interface Props {
+  name: string;
+  class?: string;
+}
+
+const icons = {
+  blog: BlogIcon,
+  github: GitHubIcon,
+  x: XIcon,
+  bluesky: BlueskyIcon,
+  kaggle: KaggleIcon,
+  misskey: MisskeyIcon,
+} as const;
+
+const { name, class: className = 'h-5 w-5' } = Astro.props;
+const Icon = icons[name as keyof typeof icons] ?? LinkIcon;
+---
+
+<Icon class={className} aria-hidden="true" />

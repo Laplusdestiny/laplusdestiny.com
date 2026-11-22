@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** 見出しの id（section の aria-labelledby から参照する） */
+  id: string;
+  /** 英語の小見出し */
+  label: string;
+  /** 件数などの補足（例: 6 repositories） */
+  meta?: string;
+  title: string;
+}
+
+const { id, label, meta, title } = Astro.props;
+---
+
+<header class="mb-8 border-t border-line pt-6 sm:mb-10">
+  <p class="font-mono text-xs tracking-wide text-ink-3">
+    {label}{meta && <span> · {meta}</span>}
+  </p>
+  <h2 id={id} class="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
+  <slot />
+</header>

@@ -1,0 +1,48 @@
+---
+import type { LanguageShare } from '../lib/works';
+import { formatBytes, formatShare } from '../lib/format';
+
+interface Props {
+  rows: LanguageShare[];
+}
+
+const { rows } = Astro.props;
+---
+
+<figure class="relative" data-chart>
+  <figcaption>
+    <span class="block text-sm font-semibold">掲載リポジトリの言語構成</span>
+    <span class="mt-1 block text-xs text-ink-3">GitHub が判定したコード量（バイト数）の割合</span>
+  </figcaption>
+
+  <ul class="mt-5 space-y-1">
+    {
+      rows.map((row) => (
+        <li
+          class="grid cursor-default grid-cols-[6.5rem_1fr_2.75rem] items-center gap-3 rounded py-1 text-sm outline-offset-0 hover:bg-line/40"
+          tabindex="0"
+          aria-label={`${row.name}: ${formatShare(row.share)}（${formatBytes(row.bytes)}）`}
+          data-tip-value={formatBytes(row.bytes)}
+          data-tip-label={row.name}
+        >
+          <span class="truncate" aria-hidden="true">{row.name}</span>
+          <span class="h-2.5" aria-hidden="true">
+            <span
+              data-tip-anchor
+              class="block h-full min-w-px rounded-r-[4px] bg-accent"
+              style={`width: ${(row.share * 100).toFixed(2)}%`}
+            />
+          </span>
+          <span class="text-right font-mono text-xs tabular-nums text-ink-2" aria-hidden="true">
+            {formatShare(row.share)}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="chart-tip" aria-hidden="true" hidden></div>
+</figure>
+
+<script>
+  import '../scripts/chart-tooltip';
+</script>

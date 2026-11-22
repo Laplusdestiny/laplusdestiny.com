@@ -3,36 +3,42 @@
     {
       "name": "Blog",
       "url": "https://blog.laplusdestiny.com",
+      "handle": "blog.laplusdestiny.com",
       "description": "雑多なブログを運営しています",
       "icon": "blog"
     },
     {
       "name": "GitHub",
-      "url": "https://github.com/laplusdestiny",
+      "url": "https://github.com/Laplusdestiny",
+      "handle": "@Laplusdestiny",
       "description": "オープンソースプロジェクトやコード公開",
       "icon": "github"
     },
     {
       "name": "Misskey.io",
       "url": "https://misskey.io/@laplusdestiny",
+      "handle": "@laplusdestiny@misskey.io",
       "description": "最近はMisskeyによくいます",
       "icon": "misskey"
     },
     {
-      "name": "X (Twitter)",
+      "name": "X",
       "url": "https://x.com/laplusdestiny",
+      "handle": "@laplusdestiny",
       "description": "最近はROM専気味ですが、たまに呟いています",
-      "icon": "twitter"
+      "icon": "x"
     },
     {
       "name": "Bluesky",
       "url": "https://bsky.app/profile/laplusdestiny.com",
+      "handle": "@laplusdestiny.com",
       "description": "Blueskyもやっています",
       "icon": "bluesky"
     },
     {
       "name": "Kaggle",
       "url": "https://kaggle.com/laplusdestiny",
+      "handle": "laplusdestiny",
       "description": "データサイエンスコンペティション",
       "icon": "kaggle"
     }

@@ -1,42 +1,44 @@
 ---
+import SectionHeading from './SectionHeading.astro';
 import skillsData from '../data/skills.json';
 
-const { categories } = skillsData;
+const { tiers, categories } = skillsData;
+const total = categories.reduce((sum, c) => sum + c.skills.length, 0);
+const grid = 'md:grid-cols-[11rem_repeat(3,minmax(0,1fr))]';
 ---
 
-<section id="skills" class="bg-surface py-24 sm:py-32">
-  <div class="mx-auto max-w-6xl px-4 sm:px-6">
-    <h2
-      class="animate-on-scroll mb-16 text-center text-3xl font-bold tracking-tight sm:text-4xl"
-    >
-      Skills
-    </h2>
+<section id="skills" aria-labelledby="skills-title" class="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
+  <SectionHeading id="skills-title" label="Skills" meta={`${total} items`} title="使っている技術" />
 
-    <div class="space-y-12">
-      {
-        categories.map((category, catIndex) => (
-          <div class={`animate-on-scroll delay-${(catIndex % 3) * 100 + 100}`}>
-            <h3 class="mb-6 text-xl font-semibold text-on-surface">{category.name}</h3>
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {category.skills.map((skill, skillIndex) => (
-                <div class="group rounded-xl border border-surface-tertiary bg-surface-secondary p-4 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary-500/10">
-                  <div class="mb-3 flex items-center justify-between">
-                    <span class="font-medium text-on-surface">{skill.name}</span>
-                    <span class="text-sm text-on-surface-tertiary">{skill.level}%</span>
-                  </div>
-                  <div class="h-2 overflow-hidden rounded-full bg-surface-tertiary">
-                    <div
-                      class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-primary-500 to-primary-400"
-                      data-level={skill.level}
-                      style={`transition-delay: ${skillIndex * 0.1}s;`}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))
-      }
-    </div>
+  <div class={`hidden gap-x-6 pb-3 font-mono text-xs text-ink-3 md:grid ${grid}`} aria-hidden="true">
+    <span>分野</span>
+    {tiers.map((tier) => <span>{tier.label}</span>)}
   </div>
+
+  <dl class="border-b border-line">
+    {
+      categories.map((category) => (
+        <div class={`grid gap-x-6 gap-y-2 border-t border-line py-4 ${grid}`}>
+          <dt class="font-semibold md:text-sm md:font-normal md:text-ink-2">{category.name}</dt>
+          {tiers.map((tier) => {
+            const skills = category.skills.filter((s) => s.tier === tier.id);
+            return (
+              <dd class={skills.length === 0 ? 'max-md:hidden' : ''}>
+                <span class="mb-1 block font-mono text-xs text-ink-3 md:sr-only">{tier.label}</span>
+                {skills.length > 0 ? (
+                  <ul class="flex flex-wrap gap-1.5">
+                    {skills.map((skill) => (
+                      <li class="rounded border border-line bg-card px-2 py-0.5 text-sm">{skill.name}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span class="text-sm text-ink-3" aria-label="なし">—</span>
+                )}
+              </dd>
+            );
+          })}
+        </div>
+      ))
+    }
+  </dl>
 </section>

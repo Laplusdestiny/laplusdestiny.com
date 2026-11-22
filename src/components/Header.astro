@@ -1,177 +1,104 @@
 ---
-const navItems = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Links', href: '#links' },
-];
+import MoonIcon from '~icons/lucide/moon';
+import SunIcon from '~icons/lucide/sun';
+import MenuIcon from '~icons/lucide/menu';
+import CloseIcon from '~icons/lucide/x';
+
+interface Props {
+  items: { label: string; href: string }[];
+}
+
+const { items } = Astro.props;
 ---
 
-<header
-  id="site-header"
-  class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
->
-  <nav class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
-    <!-- Logo -->
-    <a
-      href="#"
-      class="text-xl font-bold tracking-tight text-on-surface transition-colors hover:text-primary-500"
-    >
-      Laplusdestiny
-    </a>
+<header class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur supports-[backdrop-filter]:bg-paper/75">
+  <nav class="mx-auto flex h-14 max-w-5xl items-center justify-between px-5 sm:px-8" aria-label="メイン">
+    <a href="/" class="font-semibold tracking-tight">Laplusdestiny</a>
 
-    <!-- Desktop Nav -->
-    <div class="hidden items-center gap-8 md:flex">
-      {
-        navItems.map((item) => (
-          <a
-            href={item.href}
-            class="text-sm font-medium text-on-surface-secondary transition-colors hover:text-primary-500"
-          >
-            {item.label}
-          </a>
-        ))
-      }
+    <div class="flex items-center gap-1">
+      <ul class="hidden items-center gap-1 md:flex">
+        {
+          items.map((item) => (
+            <li>
+              <a href={item.href} class="rounded px-3 py-2 text-sm text-ink-2 transition-colors hover:text-accent">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
 
-      <!-- Dark Mode Toggle -->
       <button
-        id="theme-toggle"
         type="button"
-        class="rounded-lg p-2 text-on-surface-secondary transition-colors hover:bg-surface-tertiary hover:text-on-surface"
-        aria-label="テーマ切り替え"
+        data-theme-toggle
+        class="rounded p-2 text-ink-2 transition-colors hover:text-accent"
+        aria-label="ダークモードに切り替え"
       >
-        <!-- Sun icon (shown in dark mode) -->
-        <svg
-          class="hidden h-5 w-5 dark:block"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          ></path>
-        </svg>
-        <!-- Moon icon (shown in light mode) -->
-        <svg
-          class="block h-5 w-5 dark:hidden"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          ></path>
-        </svg>
+        <MoonIcon class="h-5 w-5 dark:hidden" aria-hidden="true" />
+        <SunIcon class="hidden h-5 w-5 dark:block" aria-hidden="true" />
       </button>
-    </div>
 
-    <!-- Mobile Menu Button -->
-    <div class="flex items-center gap-2 md:hidden">
       <button
-        id="theme-toggle-mobile"
         type="button"
-        class="rounded-lg p-2 text-on-surface-secondary transition-colors hover:bg-surface-tertiary"
-        aria-label="テーマ切り替え"
+        id="menu-button"
+        class="rounded p-2 text-ink-2 transition-colors hover:text-accent md:hidden"
+        aria-label="メニュー"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
       >
-        <svg
-          class="hidden h-5 w-5 dark:block"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-          ></path>
-        </svg>
-        <svg
-          class="block h-5 w-5 dark:hidden"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-          ></path>
-        </svg>
-      </button>
-      <button
-        id="mobile-menu-btn"
-        type="button"
-        class="rounded-lg p-2 text-on-surface-secondary transition-colors hover:bg-surface-tertiary"
-        aria-label="メニューを開く"
-      >
-        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
+        <MenuIcon class="menu-open h-5 w-5" aria-hidden="true" />
+        <CloseIcon class="menu-close hidden h-5 w-5" aria-hidden="true" />
       </button>
     </div>
   </nav>
 
-  <!-- Mobile Menu -->
-  <div
-    id="mobile-menu"
-    class="hidden border-t border-surface-tertiary bg-surface/95 backdrop-blur-md md:hidden"
-  >
-    <div class="space-y-1 px-4 py-3">
-      {
-        navItems.map((item) => (
-          <a
-            href={item.href}
-            class="mobile-nav-link block rounded-lg px-3 py-2 text-base font-medium text-on-surface-secondary transition-colors hover:bg-surface-tertiary hover:text-primary-500"
-          >
+  <ul id="mobile-menu" class="hidden border-t border-line px-5 py-2 md:hidden">
+    {
+      items.map((item) => (
+        <li>
+          <a href={item.href} class="block py-2.5 text-ink-2 hover:text-accent">
             {item.label}
           </a>
-        ))
-      }
-    </div>
-  </div>
+        </li>
+      ))
+    }
+  </ul>
 </header>
 
 <script>
-  // Dark mode toggle
-  function toggleTheme() {
-    document.documentElement.classList.toggle('dark');
-    const isDark = document.documentElement.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  const root = document.documentElement;
+  const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+
+  function syncThemeLabel() {
+    const dark = root.classList.contains('dark');
+    themeButton?.setAttribute('aria-label', dark ? 'ライトモードに切り替え' : 'ダークモードに切り替え');
   }
 
-  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
-
-  // Mobile menu toggle
-  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-
-  mobileMenuBtn?.addEventListener('click', () => {
-    mobileMenu?.classList.toggle('hidden');
+  syncThemeLabel();
+  themeButton?.addEventListener('click', () => {
+    const dark = root.classList.toggle('dark');
+    try {
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    } catch {}
+    syncThemeLabel();
   });
 
-  // Close mobile menu on nav click
-  document.querySelectorAll('.mobile-nav-link').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu?.classList.add('hidden');
-    });
-  });
+  const menuButton = document.getElementById('menu-button');
+  const menu = document.getElementById('mobile-menu');
 
-  // Header background on scroll
-  const header = document.getElementById('site-header');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      header?.classList.add('bg-surface/95', 'backdrop-blur-md', 'shadow-sm');
-    } else {
-      header?.classList.remove('bg-surface/95', 'backdrop-blur-md', 'shadow-sm');
+  function setMenu(open: boolean) {
+    menu?.classList.toggle('hidden', !open);
+    menuButton?.setAttribute('aria-expanded', String(open));
+    menuButton?.querySelector('.menu-open')?.classList.toggle('hidden', open);
+    menuButton?.querySelector('.menu-close')?.classList.toggle('hidden', !open);
+  }
+
+  menuButton?.addEventListener('click', () => setMenu(menuButton.getAttribute('aria-expanded') !== 'true'));
+  menu?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      menuButton.focus();
     }
   });
 </script>
